@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Backoffice Admin - {{ parent() }} {% endblock %}
+
+{% block body %}
+    <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+	    <h2 class="w3-wide">BACKOFFICE ADMIN</h2>
+        <a href="{{path('product_create')}}"><button class="w3-button w3-blue w3-margin-bottom w3-margin-top w3-margin-right">Créer Produit</button></a>
+        <a href="{{path('tag_create')}}"><button class="w3-button w3-blue w3-margin-bottom w3-margin-top">Créer Tag</button></a>
+        <h3 class="w3-margin-top">Liste des Produits</h3>
+        <table class="w3-table-all w3-centered">
+            <thead>
+                <th class="w3-border w3-black">Nom</th>
+                <th class="w3-border w3-black">Catégorie</th>
+                <th class="w3-border w3-black">Description</th>
+                <th class="w3-border w3-black">Prix</th>
+                <th class="w3-border w3-black">Stock</th>
+                <th class="w3-border w3-black">Tags</th>
+                <th class="w3-border w3-black">Actions</th>
+            </thead>
+            <tbody>
+                {% if products is empty %}
+                    <p>Aucun produit n'a été trouvé<p>
+                {% endif %}
+                {% for product in products %}
+                    <tr>
+                        <td class="w3-border">{{ product.name }}</td>
+                        <td class="w3-border">{{ product.categoryType }}</td>
+                        <td class="w3-border">{{ product.description|slice(0,100)}} ...</td>
+                        <td class="w3-border">{{ product.price }}€</td>
+                        <td class="w3-border">{{ product.stock }}</td>
+                        <td class="w3-border">{% if product.tags is empty %}
+                    			Aucun
+                			{% else %}
+                    			{% for tag in product.tags %}
+                        			{{ tag.name }};
+                    			{% endfor %}
+                			{% endif %}</td>
+                        <td class="w3-border"><a title="Modifier" href="{{ path('product_update', {'productId' : product.id}) }}"><i class="material-icons w3-hover-opacity w3-text-orange">&#xe3c9;</i></a> <a title="Supprimer" href="{{ path('product_delete', {'productId':product.id}) }}"><i class="material-icons w3-hover-opacity w3-text-red">&#xe872;</i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3 class="w3-margin-top">Liste des Tags</h3>
+        <table class="w3-table-all w3-centered">
+            <thead>
+                <th class="w3-border w3-black">Nom</th>
+                <th class="w3-border w3-black">Actions</th>
+            </thead>
+            <tbody>
+                {% if tags is empty %}
+                    <p>Aucun tag n'a été trouvé<p>
+                {% endif %}
+                {% for tag in tags %}
+                    <tr>
+                        <td class="w3-border">{{ tag.name }}</td>
+                        <td class="w3-border"><a title="Modifier" href="{{ path('tag_update', {'tagId':tag.id}) }}"><i class="material-icons w3-hover-opacity w3-text-orange">&#xe3c9;</i></a> <a title="Supprimer" href="{{ path('tag_delete', {'tagId':tag.id}) }}"><i class="material-icons w3-hover-opacity w3-text-red">&#xe872;</i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{# Une liste des références produit avec pour chque ligne un bouton modifier et un bouton supprimer #}
+
+{# Une liste des tags avec pour chaque tag un bouton modifier et un bouton supprimer #}
+
+    </div>
+{% endblock %}
+
+

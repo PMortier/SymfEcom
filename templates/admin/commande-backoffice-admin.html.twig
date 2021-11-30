@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+{# FICHIER DE CORRECTION lié à la fonction CORRIGEE de l'AdminController #}
+
+{% block title %}Backoffice Admin Commandes - {{ parent() }}{% endblock %}
+
+{% block body %}
+	<div class="w3-container w3-content w3-padding-64" style="max-width:1000px" id="dashboard">
+		<div class="w3-center">
+			<h1 class="w3-wide w3-padding-32">TABLEAU DE BORD ADMINISTRATEUR</h1>
+		</div>
+        {# ATTENTION : dans l'état actuel du code, ça boucle aussi sur les utilisateurs qui n'ont pas fait de commandes et ça affiche un tableau vide à chaque fois!!!!!! #}
+        
+		{% for commandeSet in commandes %}
+			{% for commandeList in commandeSet %}
+				{% for commande in commandeList %}
+                    
+					<p>
+						<b>Commande du :
+							{{ commande.creationDate|date('d/m/Y à G:i:s') }}
+							par
+							{{ commande.user.username }}</b>
+					</p>
+					<table class="w3-table-all w3-centered">
+						<thead>
+							<th>Utilisateur:
+								{{ commande.user.username }}
+							</th>
+							<th>Prix total:
+								{{ commande.totalPrice }}€
+							</th>
+							<th>Statut:
+								{{ commande.status }}</th>
+                            <th>
+							{% if commande.status == "panier" %}
+								<a href="{{ path('validate_commande_admin', {'commandeId':commande.id }) }}">
+									<button class="w3-button w3-blue-gray w3-margin-bottom">Valider Commande</button>
+								</a>
+							</th>
+							<th>
+								<a href="{{ path('delete_commande_admin', {'commandeId':commande.id }) }}">
+									<button class="w3-button w3-red w3-margin-bottom">Supprimer Commande</button>
+								</a>
+							{% endif %}
+                            </th>
+						</thead>
+						<thead>
+							<th class="w3-border w3-black">Produit</th>
+							<th class="w3-border w3-black">Quantité</th>
+							<th class="w3-border w3-black">Prix</th>
+							<th class="w3-border w3-black">Date d'ajout au panier</th>
+							{% if commande.status == "panier" %}
+								<th class="w3-border w3-black">Supprimer la Reservation</th>
+							{% endif %}
+						</thead>
+						{% for reservation in commande.reservations %}
+							<tr>
+								<td>{{ reservation.product.name }}</td>
+								<td>{{ reservation.quantity }}</td>
+								<td>{{ reservation.product.price }}€</td>
+								<td>{{ reservation.creationDate|date('d/m/Y à G:i:s') }}</td>
+								{% if reservation.commande.status == "panier" %}
+									<td>
+										<a href="{{ path('delete_reservation_admin', {'reservationId':reservation.id }) }}">
+											<button class="w3-button w3-red w3-margin-bottom">Supprimer</button>
+										</a>
+									</td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+					</table>
+				{% endfor %}
+			{% endfor %}
+			<hr><br><br>
+		{% endfor %}
+	</div>
+{% endblock %}
+

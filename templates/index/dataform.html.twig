@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index - {{ parent() }}{% endblock %}
+
+{% block body %}
+	<!-- The Dataform Section -->
+	<div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+    {# formName et dataForm seront transmis au Controller pour renseigner le titre et le formulaire #}
+		<h2 class="w3-wide">{{ formName }}</h2>
+		{{ form(dataForm) }}
+	</div>
+{% endblock %}

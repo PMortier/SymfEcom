@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TagList --
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="dashboard">
+		<div class="w3-center">
+			<h1 class="w3-wide">LISTE DES TAGS</h1>
+
+			<ul class="w3-ul w3-border-white w3-white">
+				{% for tag in tags %}
+					<li class="w3-padding">
+						<p>
+							{{ tag.name }}
+							<a href="{{ path('index_tag', {'tagId' : tag.id}) }}">
+								<button class="w3-button w3-blue-gray" style="float:right;">Parcourir</button>
+							</a>
+						</p>
+					</li>
+				{% endfor %}
+			</ul>
+
+
+		</div>
+	</div>
+{% endblock %}

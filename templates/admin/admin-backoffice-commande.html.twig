@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{# FICHIER EXERCICE (lien retiré pour ce fichier ) lié à la fonction EXERCICE dans AdminController #}
+{% block title %}Backoffice Admin Commandes - {{ parent() }} {% endblock %}
+
+{% block body %}
+    <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+	    <h2 class="w3-wide">BACKOFFICE ADMIN COMMANDES</h2>
+       
+        <h3 class="w3-margin-top">Liste des Commandes</h3>
+        <table class="w3-table-all w3-centered">
+            <thead>
+                <th class="w3-border w3-black">Id_commande</th>
+                <th class="w3-border w3-black">Date</th>
+                <th class="w3-border w3-black">Statut</th>
+                <th class="w3-border w3-black">User</th>
+                <th class="w3-border w3-black">Prix total</th>
+                <th class="w3-border w3-black">Actions</th>
+            </thead>
+            <tbody>
+                {% if commandes is empty %}
+                    <p>Aucune commande n'a été trouvée<p>
+                {% endif %}
+                {% for commande in commandes %}
+                    <tr>
+                        <td class="w3-border">{{ commande.id }}</td>
+                        <td class="w3-border">{{ commande.creationDate|date('d/m/Y à G:i:s') }}</td>
+                        <td class="w3-border">{{ commande.status}}</td>
+                        <td class="w3-border">
+                        {% if commande.user is not null %}
+                            {{ commande.user.username }}
+                        {% else %}
+                            Inconnu
+                        {% endif %}
+                        </td>
+                        <td class="w3-border">{{ commande.totalPrice }} €</td>
+                        <td class="w3-border">?</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} - Fiche produit {% endblock %}
+
+{% block body %}
+
+	<div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="produitmobilier">
+		<h2 class="w3-wide w3-center">FICHE PRODUIT: {{ product.name }}</h2>
+		<p class="w3-opacity w3-center">
+			<i>ProduitsMobilier.store</i>
+		</p><br>
+		<div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
+			<div class="w3-third w3-margin-bottom" style="width:65%">
+				<img src="{{ asset('/assets/img/placeholder_' ~ product.categoryType ~ '.jpg') }}" class="w3-round w3-hover-opacity" style="width: 300px;" alt="Produit">
+				<div class="w3-container w3-white">
+					<p>
+						<b>{{ product.name }}</b>
+					</p>
+					<p>
+						<b>Tags:</b>
+						{% if product.tags is empty %}
+                    		Aucun
+                		{% else %}
+                    		{% for tag in product.tags %}
+                        		<a href="{{path('index_tag', {'tagId':tag.id})}}">{{ tag.name }}</a>;
+                    		{% endfor %}
+                		{% endif %}
+					</p>
+				</div>
+			</div>
+			<div class="w3-third w3-margin-bottom" style="width:33%">
+				<div class="w3-container w3-white">
+					<p>
+						<b>{{ product.name }}</b>
+					</p>
+					<p class="w3-opacity">Stock: {{ product.stock }} unités disponibles</p>
+					<p class="w3-opacity">Prix: {{ product.price }} €</p>
+					<p>{{ product.description }}</p>
+					{% if is_granted('ROLE_USER') %}
+						{% if product.stock == 0 %}
+						<p class="w3-text-red">Produit épuisé<p>
+						{% else %}
+							{{ form(buyForm) }}
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

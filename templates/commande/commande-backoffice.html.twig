@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Backoffice Commandes - {{ parent() }} {% endblock %}
+
+{% block body %}
+    <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:1000px" id="band">
+	    <h2 class="w3-wide">BACKOFFICE COMMANDES</h2>
+
+        <h3 class="w3-wide w3-center w3-margin-top">Commande Active</h3>
+        {% if is_granted('ROLE_USER') %}
+            {% if activeCommande is not null %}
+                <p><b>Commande créée le : {{ activeCommande.creationDate|date('d/m/Y à G:i:s') }}</b></p>
+                <table class="w3-table-all w3-centered">
+                    <thead>
+                        <th>Utilisateur: 
+                            {% if activeCommande.user is not null %}
+                                {{ activeCommande.user.username }}
+                            {% else %}
+                                Inconnu
+                            {% endif %}
+                            </th>
+                        <th>Prix total: 
+                            {% if activeCommande.totalPrice is defined %}
+                                {{ activeCommande.totalPrice }} €
+                            {% else %}
+                                ???
+                            {% endif %}
+                        </th>
+                        <th>Statut: {{ activeCommande.status }}</th>
+                        <th>
+                            <a href="{{ path('validate_commande', {'commandeId':activeCommande.id}) }}">
+                                <button class="w3-button w3-green w3-margin-bottom">Valider Commande</button>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ path('delete_commande', {'commandeId':activeCommande.id} )}}">
+                                <button class="w3-button w3-red w3-margin-bottom">Supprimer Commande</button>
+                            </a>
+                        </th>
+                    </thead>
+                    <thead>
+                        <th class="w3-border w3-black">Produit</th>
+                        <th class="w3-border w3-black">Quantité</th>
+                        <th class="w3-border w3-black">Prix</th>
+                        <th class="w3-border w3-black">Date d'ajout au panier</th>
+                        <th class="w3-border w3-black">Supprimer la Reservation</th>
+                    </thead>
+                    <tbody>
+                        {% for reservation in activeCommande.reservations %}
+                        <tr>
+                            <td class="w3-border">{{ reservation.product.name }}</td>
+                            <td class="w3-border">{{ reservation.quantity }}</td>
+                            <td class="w3-border">{{ reservation.product.price }} €</td>
+                            <td class="w3-border">{{ reservation.creationDate|date('d/m/Y à G:i:s') }}</td>
+                            <td>
+                                <a href="{{ path('delete_reservation', {'reservationId':reservation.id}) }}"><button class="w3-button w3-red w3-margin-bottom">Supprimer</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p><b>Vous n'avez pas de commande en cours</b></p>
+            {% endif %}
+        {% else %}
+            <p><b>Vous devez être connecté en tant qu'utilisateur pour voir vos commandes en cours</b></p>   
+        {% endif %}
+
+        <h3 class="w3-wide w3-center w3-margin-top">Commandes précédentes</h3>
+        {% if is_granted('ROLE_USER') %}
+            {% if commandes is not empty %}
+                {% for commande in commandes %}
+                    <table class="w3-table-all w3-centered w3-margin-top">
+                        <thead>
+                            <th>Utilisateur: 
+                                {% if commande.user is not null %}
+                                    {{ user.username }}
+                                {% else %}
+                                    Inconnu
+                                {% endif %}
+                                </th>
+                            <th>Commande lancée le : {{ commande.creationDate|date('d/m/Y à G:i:s') }}</th>
+                            <th>Statut: {{ commande.status }}</th>
+                            <th>Prix total: 
+                                {% if commande.totalPrice is defined %}
+                                    {{ commande.totalPrice }} €
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            </th>
+                        </thead>
+                        <thead>
+                            <th class="w3-border w3-black">Produit</th>
+                            <th class="w3-border w3-black">Quantité</th>
+                            <th class="w3-border w3-black">Prix</th>
+                            <th class="w3-border w3-black">Date d'ajout au panier</th>
+                        </thead>
+                        <tbody>
+                            {% for reservation in commande.reservations %}
+                            <tr>
+                                <td class="w3-border">{{ reservation.product.name }}</td>
+                                <td class="w3-border">{{ reservation.quantity }}</td>
+                                <td class="w3-border">{{ reservation.product.price }} €</td>
+                                <td class="w3-border">{{ reservation.creationDate|date('d/m/Y à G:i:s') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            {% else %}
+                <p><b>Vous n'avez pas de commandes passées</b></p>
+            {% endif %}
+        {% else %}
+            <p><b>Vous devez être connecté en tant qu'utilisateur pour voir vos commandes passées</b></p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
