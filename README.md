@@ -1,3 +1,3 @@
 # SymfEcom
 
-Projet de formation : site e-commerce
+Projet de formation : site e-commerce (Symfony)
